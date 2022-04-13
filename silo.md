@@ -5,6 +5,8 @@
 
 1. The **idea** is to place a low, finite bound on queueing to fully control network interference.
 
+1. <a name="guar"> It computes latency guarantees by ensuring that each flow has at least one packet in transit in the network at any given time. </a>
+
 1. this utilizes a concept of epochs, with a mesosynchronous network (same frequency but possibly phase-shifted) to give the following key property: **if we rate-limit all the hosts so that they can only issue one packet every network epoch, then no packet will take more than one network epoch to be delivered in the worst-case**.
 
 1. Each application is assigned to a latency sensitivity level. Packets from higher levels are rate-limited in the end host, but once allowed into the network can _jump the queue_ over packets from lower levels.
@@ -20,9 +22,13 @@
 
 
 
-- provides packet latency and bandwidth guarantees. does not allow bursts (?)
+- provides packet latency and bandwidth guarantees.
 
 Static allocations can lead to unnecessary request rejections. By not optimizing nor accounting for the routes where flows are embdedded, such approaches are not demand-aware, as the network state and performance characteristics depend on the specific route taken.
+
+### Drawback(s):
+1. It only provides a latency guaratee for very low bandwidth traffic, while higher bandwidth traffic can incur variable message latency.
+1. To ensure [this](#guar), QJUMP prevents applications from sending bursts of data.
 
 ## Silo
 
