@@ -1,11 +1,14 @@
 
 ## QJUMP
-1. Relies on information about application perfformance requirements, related to latency, rate and packet size, at network initialization time.
-1. maximum latency of $2nP/R + \epsilon$.
+
+(2015)
+1. Relies on information about application performance requirements, related to latency, rate and packet size, at network initialization time.
+
+1. It ensures a maximum latency of $2nP/R + \epsilon$, which is the **network epoch**, where $n$ is the number of hosts, $P$ is the max packet size (in bits), $R$ is the rate of the slowest link (in bits/sec) and $\epsilon$ is the cumulative processing delay introduced by switch hops.
 
 1. The **idea** is to place a low, finite bound on queueing to fully control network interference.
 
-1. <a name="guar"> It computes latency guarantees by ensuring that each flow has at least one packet in transit in the network at any given time. </a>
+1. <a name="guar"> It computes latency guarantees by ensuring that each flow has at least one packet in transit in the network at any given time. </a> This results in our second drawback.
 
 1. this utilizes a concept of epochs, with a mesosynchronous network (same frequency but possibly phase-shifted) to give the following key property: **if we rate-limit all the hosts so that they can only issue one packet every network epoch, then no packet will take more than one network epoch to be delivered in the worst-case**.
 
@@ -28,9 +31,10 @@ Static allocations can lead to unnecessary request rejections. By not optimizing
 
 ### Drawback(s):
 1. It only provides a latency guaratee for very low bandwidth traffic, while higher bandwidth traffic can incur variable message latency.
-1. To ensure [this](#guar), QJUMP prevents applications from sending bursts of data.
+1. To ensure [this (Pt. 4)](#guar), QJUMP prevents applications from sending bursts of data.
 
 ## Silo
+(2015)
 
 1. Silo leverages the tight coupling between bandwidth and delay: controlling tenant bandwidth leads to determinstic bounds on network queuing delay.
 
@@ -43,20 +47,24 @@ Static allocations can lead to unnecessary request rejections. By not optimizing
 1. Makes use of "void" packets for _Paced IO Batching_ that are forwarded by NIC but dropped by the first hop switch, simulating a spaced out flow of actual data packets. Rate-limiting the senders in a network ensures a deterministic upper bound for network queuing.e
 1. Silo also encompasses a **VM placement manager** along with a **hypervisor-based packet pacer**.
 
-- provides packet latency, burst and bandwidth guarantees.
 
-### 3 key requirements
+### Provides -
 
 1. guaranteed bandwidth
 1. guaranteed packet delay - through fine-grained rate control at end hosts.
 1. guaranteed burst allowance
+1. And therefore, **guaranteed packet latency**.
 
 
 ### Drawback(s):
-1. Giving delay and bandwidth guarantees to tenants can result in reduction of network utilization and fewer accepted tenants compared to giving only bandwidth guarantees.
+1. Giving delay and bandwidth guarantees to tenants can result in reduction of network utilization.
+1. There are fewer accepted tenants compared to giving only bandwidth guarantees.
+
+
 
 
 ## Chameleon
+(2020)
 
 1. Chameleon employs source routing on the queue-level topology, a network abstraction that accounts for the current states of the network queues, and hence, the different delays of different paths.
 1. Builds on the concept of Silo in terms of _resource allocation_, _access control_ and _resource reservation_.
@@ -77,14 +85,11 @@ Static allocations can lead to unnecessary request rejections. By not optimizing
 
 
 
-
-None of the aforementioned approaches are work-conserving.
-
-### unrelated
-- Provides:
-    1. predictable latency
-    1. high utilization
-
+## Concluding notes
+1. None of the aforementioned approaches are work-conserving.
+1. Chameleon accepts between 2x and 10x more flow requests and has a higher network utilization compared to QJUMP and Silo.
+1. QJUMP has a much lower runtime than Chameleon and Silo due to the pre-assignment of all its decision parameters.
+1. 
 
 <!--- ElasticSwitch -->
 
