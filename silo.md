@@ -29,7 +29,7 @@
 1. At first, the routing procedure tries to find a path for the flow request using a least-delay search. If it fails, the procedure tries to reroute alredy embedded flows to make space for the new one.
         
     - It selects all flows traversing at least one edge of any of the equal-length shortest paths in the physical topology from the source server to the destination server of the new flow to embed. 
-    - it sorts the flows according to the number of shared physical links with the shortest paths, and this list is truncated to limit the maximum number of re-routing retries, which mitigates the [runtime increase caused by re-reouting](/predictable-latency-schedulers/silo.md##Silo) .
+    - it sorts the flows according to the number of shared physical links with the shortest paths, and this list is truncated to limit the maximum number of re-routing retries, which mitigates the [runtime increase caused by re-reouting](/predictable-latency-schedulers/silo.md##silo) .
 
 
 ### Drawback(s)
