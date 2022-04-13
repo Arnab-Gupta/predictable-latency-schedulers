@@ -2,13 +2,13 @@
 ## QJUMP
 
 (2015)
-1. Relies on information about application performance requirements, related to latency, rate and packet size, at network initialization time.
+1. QJUMP relies on information about application performance requirements, related to latency, rate and packet size, at network initialization time.
 
 1. It ensures a maximum latency of $2nP/R + \epsilon$, which is the **network epoch**, where $n$ is the number of hosts, $P$ is the max packet size (in bits), $R$ is the rate of the slowest link (in bits/sec) and $\epsilon$ is the cumulative processing delay introduced by switch hops.
 
 1. The **idea** is to place a low, finite bound on queueing to fully control network interference.
 
-1. <a name="guar"> It computes latency guarantees by ensuring that each flow has at least one packet in transit in the network at any given time. </a> This results in our second drawback.
+1. <a name="guar"> It computes latency guarantees by ensuring that each flow has at least one packet transitting the network at any given time. </a> This results in our second drawback.
 
 1. this utilizes a concept of epochs, with a mesosynchronous network (same frequency but possibly phase-shifted) to give the following key property: **if we rate-limit all the hosts so that they can only issue one packet every network epoch, then no packet will take more than one network epoch to be delivered in the worst-case**.
 
@@ -90,8 +90,6 @@ Static allocations can lead to unnecessary request rejections. By not optimizing
 1. Chameleon accepts between 2x and 10x more flow requests and has a higher network utilization compared to QJUMP and Silo.
 1. QJUMP has a much lower runtime than Chameleon and Silo due to the pre-assignment of all its decision parameters.
 1. 
-
-<!--- ElasticSwitch -->
 
 
 
